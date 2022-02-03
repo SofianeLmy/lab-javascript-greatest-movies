@@ -15,8 +15,7 @@ function getAllDirectors(movies) {
 function howManyMovies(movies) {
   const howManyMoviesGenre = movies.filter((movie, index, originalArray) => {
     if (
-      movie.genre.includes('Drama') &&
-      movie.director.includes('Steven Spielberg')
+      movie.genre.includes('Drama') && movie.director.includes('Steven Spielberg')
     ) {
       return true;
     } else {
@@ -29,41 +28,44 @@ function howManyMovies(movies) {
 // Iteration 3: All scores average - Get the average of all scores with 2 decimals
 function scoresAverage(movies) {
   const sumOfAllScores = movies.reduce((sumOfAllScores, movie) => {
-    return sumOfAllScores + movie.score;
+    if (typeof movie.score === 'undefined' || movie.score === '') {
+      return sumOfAllScores;
+    } else {
+    return sumOfAllScores + movie.score / movies.length;
+  }
   }, 0);
-  const averageScore = sumOfAllScores / movies.length;
-  if (!movies.length){
-    return 0;
-  } else {
-  return Number(averageScore.toFixed(2));
-}}
+    return Number(sumOfAllScores.toFixed(2));
+}
 
 // Iteration 4: Drama movies - Get the average of Drama Movies
 function dramaMoviesScore(movies) {
   const allDramaMovies = movies.filter((movie, index, originalArray) => {
     if (movie.genre.includes('Drama')) {
-        return true;}
-      })
+      return true;
+    }
+  });
   return scoresAverage(allDramaMovies);
 }
 
 // Iteration 5: Ordering by year - Order by year, ascending (in growing order)
 function orderByYear(movies) {
-let sortedArray = movies.sort(function (a,b) { 
-  if (a.year !== b.year) {
-  return a.year - b.year;
-} else {
-  return a.title.localeCompare(b.title);
-}
-}); 
+  let sortedArray = movies.sort(function (a, b) {
+    if (a.year !== b.year) {
+      return a.year - b.year;
+    } else {
+      return a.title.localeCompare(b.title);
+    }
+  });
   return [...sortedArray];
 }
 
 // Iteration 6: Alphabetic Order - Order by title and print the first 20 titles
 function orderAlphabetically(movies) {
-let sortedArray = movies.sort((a,b) => a.title.localeCompare(b.title));
-const newSortedArray = sortedArray.slice(0,20);
-return newSortedArray.map(a=>a.title);
+  const cloneMovie = [...movies]
+  let sortedArray = cloneMovie.sort((a, b) => a.title.localeCompare(b.title));
+  const newSortedArray = sortedArray.slice(0, 20);
+  const result = newSortedArray.map((a) => a.title);
+  return result;
 }
 
 // BONUS - Iteration 7: Time Format - Turn duration of the movies from hours to minutes
